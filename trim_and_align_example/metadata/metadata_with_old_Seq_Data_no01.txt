@@ -1,0 +1,16 @@
+sample,condition,amp-treatment
+2,T0-L50-1,high-lactose,no
+3,T0-L50-2,high-lactose,no
+4,T0-L50-3,high-lactose,no
+5,T0-L50-4,high-lactose,no
+6,T0-L50-6,high-lactose,no
+7,T0-L50-7,high-lactose,no
+8,T0-L50-8,high-lactose,no
+9,T0-L50-9,high-lactose,no
+10,T0-L25-10,med-lactose,no
+13,OLD-L25-1,med-lactose,no
+14,OLD-L25-2,med-lactose,no
+15,OLD-L25-3,med-lactose,no
+16,OLD-L25-4,med-lactose,no
+17,OLD-L25-5,med-lactose,no
+18,OLD-L50-1,high-lactose,no
