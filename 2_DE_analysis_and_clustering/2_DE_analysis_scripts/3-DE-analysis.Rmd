@@ -1,0 +1,282 @@
+---
+title: "Differential analysis with DESeq2"
+output: html_notebook
+---
+
+- In this analysis, /*all gene statics*/ are saved to .csv file for facilitating further analysis. 
+- Also, the normalized counts were also saved. 
+- The adjusted p value (FDR) threshold is set to 0.05 for identifying significant.
+- Removing all the post ampicillin replicas for this analysis.
+
+# Load package
+```{r}
+library("DESeq2")
+library("EnhancedVolcano")
+```
+# Load data
+```{r}
+control_gene_index = as.integer(scan("HelpFiles/non_regulated_gene_index_for_R.txt", what = "integer", sep = ","))
+
+control_gene_index[1:10]
+```
+
+```{r}
+# load the data 
+# round to integer
+countfile = './countdata.txt'
+countsdata = read.csv(countfile, sep="\t", header=TRUE,row.names=1 )
+countsdata = round(countsdata, digits = 0)
+head(countsdata,4)
+```
+
+# Remove OD.L50.01
+```{r}
+# remove the outlier sample
+countsdata$OD.L50.01 = NULL
+countsdata$T0.L25.10 = NULL
+countsdata$T1.L01.12 = NULL
+```
+
+```{r}
+dim(countsdata)
+```
+```{r}
+countsdata[1,]
+```
+
+```{r}
+for (i in range(4488)){
+  if (sum(countsdata[i,]>=1)==0){print(countsdata[i,])}
+}
+```
+
+
+# Function: Systematically rename all the columns
+There were repeated names after I change the "OD" to "T0". This is really bad. 
+I need to change the column names that there are not repetitive. 
+I am not sure if I am going to meet similar problems. But if I do, I supposed I have some certain *pattern*, and then find this *pattern* in all my column names, and then change the column names system matically. 
+```{r}
+sys_naming = function(dataset, condition) {
+  
+  # This function take in a dataset, which should be a R dataframe, where each row is a variable, and each column is a sample name. The function will take in both the data frame and the condition names, as an indicator to return an systmatically re-named dataframe. 
+  # input:
+  # dataset - the count dataframe
+  # condition - an named vector for conditions, where the vector are the new patterns, and the name of the vector are the patterns happend in the column names
+  # output:
+  # new_dataset - dataframe with systematically re-named columns
+  
+  name_vector = colnames(dataset)    # obtain the column names
+  
+  new_name = substr(name_vector,1,6)    # for loop for replacing all the condition names
+  for ( i in 1:length(condition)) {    
+    new_name = gsub(names(condition[i]), condition[[i]], new_name)
+  }
+    
+  num_string = gsub(" ", "0", format(1:length(name_vector), trim = FALSE))    # column numbering
+  new_name_vector = paste(new_name, num_string, sep = "")    # the new column names
+  
+  names(name_vector) = new_name_vector    # named vector that index the new name will trace back to its old names
+  #print(name_vector)
+  
+  return(name_vector)
+}
+```
+
+```{r}
+# use the function sys_naming for changing the dataframe column names. 
+conditions = c("pre_lac01_", "pre_lac25_", "pre_lac50_", "pst_lac01_", "pst_lac50_", "pre_lac01_", "pre_lac25_", "pre_lac50_")
+names(conditions) = c("T0.L01", "T0.L25", "T0.L50", "T1.L01", "T1.L50", 
+                      "OD.L01", "OD.L25", "OD.L50")
+new_con_names = sys_naming(countsdata, conditions)
+
+counts_data_qc = countsdata
+colnames(counts_data_qc) = names(new_con_names)    # change dataframe column names
+colnames(counts_data_qc)
+```
+
+# Create handle dataframe
+```{r}
+sample = colnames(counts_data_qc)
+handle = data.frame(row.names = sample)
+
+handle$condition_all = substr(sample, 1,9)
+handle$lactose = substr(handle$condition_all,5,9)
+
+#handle$lactose = gsub("lac01", "0.1 mg/ml - low",handle$lactose)
+#handle$lactose = gsub("lac25", "2.5 mg/ml - mid",handle$lactose)
+#handle$lactose = gsub("lac50", "50 mg/ml - high",handle$lactose)
+
+handle$ampicillin = substr(handle$condition_all,1,3)
+
+View(handle)
+all(rownames(handle)==colnames(countsdata))
+```
+
+
+```{r}
+dim(countsdata)
+```
+
+# Differential analysis
+
+Then let us define the differential analysis object.
+Note here, the design formula. I suppose it is a GLM for addation of all conditions. It's a good idea to consider other design.
+
+Perform the differential analysis 
+
+```{r}
+reflist = c("pre_lac01","pre_lac25", "pre_lac50")
+```
+
+### Function: vocanoplot
+
+```{r}
+# volcano plot
+# desfolder - folder for containing the files
+
+myvocano = function(result_matrix, result_condition, desfolder, refhere, p_bar = 0.05){
+  
+  # reorder the results according to the p value
+  resOrdered <- result_matrix[order(result_matrix$pvalue),]
+  
+  # create a subpath for reference condition in the desfolder
+  subdir = paste(desfolder,"/",refhere, sep = "")
+  if (dir.exists(subdir) == FALSE) {dir.create(subdir)}
+  
+  # define pdf path
+  plotname = paste(subdir, "/", substr(result_condition,15,36),".pdf", sep = "")
+  pdf(plotname, width=5.5, height=6)
+  # select significant DE data
+  result_sig <- subset(resOrdered, padj < p_bar)
+  vocano = EnhancedVolcano(
+    result_sig, 
+    lab = rownames(result_sig), 
+    #selectLab = result_sig@rownames[1:30],
+    selectLab = c(),
+    pCutoff = p_bar,
+    FCcutoff = 2,
+    title = substr(result_condition,15,30),
+    x = "log2FoldChange", y = "pvalue",
+    xlab = bquote(~Log[2]~ "fold change"), ylab = bquote(~-Log[10]~italic(FDR))
+    )
+  print(vocano)
+  dev.off()
+}
+```
+
+```{r}
+# print and save summary log
+summarylog = function(result_matrix, result_condition, desfolder, refhere, p_bar = 0.05, getall=0){
+
+  summary(result_matrix, alpha = p_bar)
+  
+  # create a subpath for reference condition in the desfolder
+  subdir = paste(desfolder,"/",refhere, sep = "")
+  if (dir.exists(subdir) == FALSE) {dir.create(subdir)}
+
+  # export summary to a txt file
+  result_summary <- capture.output(summary(result_matrix, alpha = p_bar))
+  cat(
+    result_summary, 
+    file=paste(subdir, "/", substr(result_condition,15,36), "_summary", ".txt", sep = ""),
+    sep="\n", append=FALSE)
+}
+
+# export results as .csv file
+resultcsv = function(result_matrix, result_condition, desfolder, refhere, p_bar = 0.05, getall=0){
+  
+  # getall = 0, then .csv record only significant genes
+  # getall = 1, then .csv record the entire genes records
+  
+  # We can order our results table by the smallest p value
+  resOrdered <- result_matrix[order(result_matrix$pvalue),]
+  
+  # export data
+  if (getall==1){result_sig <- subset(resOrdered)}
+  else {result_sig <- subset(resOrdered, padj < p_bar)}
+  # create a subpath for reference condition in the desfolder
+  subdir = paste(desfolder,"/",refhere, sep = "")
+  if (dir.exists(subdir) == FALSE) {dir.create(subdir)}
+  
+  # define pdf path
+  csvname = paste(subdir, "/", substr(result_condition,15,36), ".csv", sep = "")
+  print(csvname)
+  write.csv(as.data.frame(result_sig), file=csvname)
+}
+```
+
+
+```{r}
+deseqloop = function(dataobject, reflist, vocadir, csvdir){
+  dds_de_list = list()
+  for (i in c(1:length(reflist))) {
+    # factor function is available for aimed comparisions
+    print(reflist[i])
+    dataobject$condition_all <- relevel(dataobject$condition_all, ref = reflist[i])
+    
+    # DE analysis
+    #dds_de = DESeq(dataobject, test = "Wald")
+    dds_de <- estimateSizeFactors(dataobject, controlGenes = control_gene_index)
+    #dds_de <- estimateSizeFactors(dataobject)
+    dds_de <- estimateDispersions(dds_de)
+    dds_de <- nbinomWaldTest(dds_de)
+    
+    dds_de_list[i]=dds_de
+    
+    # print results names
+    renames = resultsNames(dds_de)
+    
+    # print size factor
+    size_factor = dds_de@colData@listData$sizeFactor    # the size factor for each replica
+    print(size_factor)
+    DESeq2_norm = counts(dds_de, normalized=TRUE)    # obtain the normalized counts for each replica
+    normfile = paste(csvdir, "/", "norm_count.csv", sep='')
+    write.csv(as.data.frame(DESeq2_norm), file=normfile)
+    
+    
+    for (j in c(2:length(renames))){
+      res = lfcShrink(dds_de, coef=j, type="apeglm")
+      # create vocano plot
+      myvocano(res, renames[j], vocadir, reflist[i], p_bar = 0.05)
+      # create csv files
+      resultcsv(res, renames[j], csvdir, reflist[i], p_bar = 0.05 , getall=1)
+      summarylog(res, renames[j], csvdir, reflist[i], p_bar = 0.05 , getall=1)
+    }
+  }
+  names(dds_de_list) = reflist
+  return(dds_de_list)
+}
+```
+
+```{r}
+vofolder = "./DE-Volcano"
+csvfolder = "./DE-CSVs"
+ddsObj <- DESeqDataSetFromMatrix(countData = counts_data_qc,
+                              colData = handle,
+                              design = ~ condition_all)
+de_object = deseqloop(ddsObj, reflist, vofolder, csvfolder)
+```
+```{r}
+de_object
+```
+
+```{r}
+i = 1
+while (i<=length(de_object)) {
+  
+  j = 2
+  while(j<=length(resultsNames(de_object[[i]]))){
+    resLFC <- lfcShrink(de_object[[i]], coef=j, type="apeglm")
+    plotMA(resLFC, alpha = 0.1, main = paste(reflist[i], resultsNames(de_object[[i]])[[j]], sep = "" ))
+    j = j+1
+  }
+  
+  i = i+1
+}
+```
+
+```{r}
+resLFC <- lfcShrink(de_object[[1]], coef=2, type="apeglm")
+plotMA(resLFC)
+```
+

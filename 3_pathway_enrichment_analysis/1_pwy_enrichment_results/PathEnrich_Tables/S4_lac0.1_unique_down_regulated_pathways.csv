@@ -1,0 +1,32 @@
+,Pathway ID,Name,Gene Set Size,Spearman correlation,Toxication NES,Starvation NES
+0,GLYCLEAV-PWY,glycine cleavage,4,-0.21081851067789195,0.0,-1.74446866914895
+1,BETSYN-PWY,glycine betaine biosynthesis I (Gram-negative bacteria),2,-0.9999999999999999,0.0,-1.59564635928502
+2,PWYCQD-2,dTDP-<i>N</i>-acetylviosamine biosynthesis,6,0.13093073414159545,0.0,-1.94693922872201
+3,OANTIGEN-PWY-1,<i>O</i>-antigen building blocks biosynthesis (<i>E. coli</i>),12,0.30623504748186503,0.0,-2.22628380634873
+4,GALACTMETAB-PWY,galactose degradation I (Leloir pathway),5,0.3354101966249684,0.0,-1.83450932559964
+5,SO4ASSIM-PWY,sulfate reduction I (assimilatory),6,0.39279220242478635,0.0,-2.14308117941814
+6,PYRUVDEHYD-PWY,pyruvate decarboxylation to acetyl CoA,3,0.5,0.0,-1.61423772504021
+7,PWY-5084,2-oxoglutarate decarboxylation to succinyl-CoA,3,0.5,0.0,-1.61423772504021
+8,PWY-7315,dTDP-<i>N</i>-acetylthomosamine biosynthesis,6,0.50709255283711,0.0,-1.81003477991397
+9,PWY-7184,pyrimidine deoxyribonucleotides <i>de novo</i> biosynthesis I,8,0.5480245826494338,0.0,-1.7702754029473
+10,ILEUSYN-PWY,isoleucine biosynthesis I (from threonine),10,0.6522972779249931,0.0,-2.04839191773803
+11,DTDPRHAMSYN-PWY,dTDP-L-rhamnose biosynthesis I,6,0.6546536707079772,0.0,-1.94693922872201
+12,HOMOSERSYN-PWY,homoserine biosynthesis,4,0.7378647873726218,0.0,-1.62517285598063
+13,TRPSYN-PWY,tryptophan biosynthesis,5,0.8207826816681233,0.0,-1.76674469696165
+14,ASPARAGINESYN-PWY,asparagine biosynthesis II,2,0.9999999999999999,0.0,-1.960279353086185
+15,PWY-6890,4-amino-2-methyl-5-diphosphomethylpyrimidine biosynthesis,2,0.9999999999999999,0.0,-1.034459524555671
+16,PWY0-1325,superpathway of asparagine biosynthesis,2,0.9999999999999999,0.0,-1.960279353086185
+17,PWY-6700,queuosine biosynthesis,4,1.0,0.0,-1.62973520707064
+18,HISTSYN-PWY,histidine biosynthesis,9,NC,0.0,-2.24520962717538
+19,PWY-7344,UDP-D-galactose biosynthesis,1,NC,0.0,-3.96474847714805
+20,PWY0-1517,sedoheptulose bisphosphate bypass,2,NC,0.0,-2.33304015435224
+21,PWY0-501,lipoate biosynthesis and incorporation I,2,NC,0.0,-1.14723463250985
+22,GLUTATHIONESYN-PWY,glutathione biosynthesis,2,NC,0.0,-1.46961664040335
+23,PWY0-1275,lipoate biosynthesis and incorporation II,2,NC,0.0,-1.34490082686746
+24,PWY-6618,guanine and guanosine salvage III,1,NC,0.0,-1.48323845531231
+25,PWY0-522,lipoate salvage I,1,NC,0.0,-1.34490082686746
+26,SALVPURINE2-PWY,xanthine and xanthosine salvage,1,NC,0.0,-2.09369111166107
+27,ASPARAGINE-BIOSYNTHESIS,asparagine biosynthesis I,1,NC,0.0,-2.16287465490831
+28,GLUT-REDOX-PWY,glutathione redox reactions II,1,NC,0.0,-1.21225653973847
+29,PWY0-1295,pyrimidine ribonucleosides degradation,2,NC,0.0,-1.49186470735849
+30,PWY-5340,sulfate activation for sulfonation,3,NC,0.0,-1.62773553196994

@@ -1,0 +1,13 @@
+{
+	"n_targets": 4209,
+	"n_bootstraps": 0,
+	"n_processed": 518542,
+	"n_pseudoaligned": 169776,
+	"n_unique": 169502,
+	"p_pseudoaligned": 32.7,
+	"p_unique": 32.7,
+	"kallisto_version": "0.48.0",
+	"index_version": 10,
+	"start_time": "Fri Sep  9 16:31:58 2022",
+	"call": "kallisto quant -b 10 -i reference_data/transcripts.idx -o kallisto_aligned/T0-L01-02 trimmed_fastq/T0-L01-02_R1_paired.fq.gz trimmed_fastq/T0-L01-02_R2_paired.fq.gz"
+}

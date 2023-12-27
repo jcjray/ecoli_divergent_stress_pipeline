@@ -1,0 +1,26 @@
+,Pathway ID,Name,Gene Set Size,Spearman correlation,Toxication NES,Starvation NES
+0,PWY-5188,tetrapyrrole biosynthesis I (from glutamate),10,0.0,-2.18289933883907,0.0
+1,PWY0-1061,superpathway of alanine biosynthesis,8,0.22094697908676547,-1.86913851875708,0.0
+2,PWY0-881,superpathway of fatty acid biosynthesis I (E. coli),9,0.3916747259003201,-2.40022791532212,0.0
+3,PWY0-862,<i>cis</i>-dodecenoyl biosynthesis,5,0.46169025843831935,-1.98226327986138,0.0
+4,PWY-5989,stearate biosynthesis II (bacteria and plants),5,0.46169025843831935,-1.97648092386062,0.0
+5,FASYN-ELONG-PWY,fatty acid elongation -- saturated,7,0.5188745216627708,-2.15866430173389,0.0
+6,PWY-5973,<i>cis</i>-vaccenate biosynthesis,7,0.523570314404736,-2.09370128795272,0.0
+7,BIOTIN-BIOSYNTHESIS-PWY,biotin biosynthesis I,11,0.5406702547064378,-1.7848757136377,0.0
+8,PWY-5971,palmitate biosynthesis II (bacteria and plants),6,0.5768179036829705,-1.98226327986138,0.0
+9,PWY-6284,superpathway of unsaturated fatty acids biosynthesis (<i>E. coli</i>),8,0.5997122939864165,-2.08385214056179,0.0
+10,FASYN-INITIAL-PWY,superpathway of fatty acid biosynthesis initiation (E. coli),4,0.632455532033676,-1.84155283086639,0.0
+11,PWY0-163,salvage pathways of pyrimidine ribonucleotides,7,0.7041868508280462,-1.8942574369884,0.0
+12,ARGSYN-PWY,arginine biosynthesis I (via L-ornithine),11,0.7723046972889297,-1.79139826299518,0.0
+13,PWY0-166,superpathway of pyrimidine deoxyribonucleotides <i>de novo</i> biosynthesis (E. coli),12,0.8004983736958102,-1.92306257086617,0.0
+14,TCA,TCA cycle I (prokaryotic),19,0.8015890843607445,-1.77962643391511,0.0
+15,PWY-7220,adenosine deoxyribonucleotides <i>de novo</i> biosynthesis II,6,0.942857142857143,-1.92800866810809,0.0
+16,PWY-7222,guanosine deoxyribonucleotides <i>de novo</i> biosynthesis II,6,0.942857142857143,-1.92800866810809,0.0
+17,GLUTDEG-PWY,glutamate degradation II,2,0.9999999999999999,-1.79834063235752,0.0
+18,PWY0-1534,hydrogen sulfide biosynthesis I,2,0.9999999999999999,-1.79834063235752,0.0
+19,PWY-5123,"<i>trans, trans</i>-farnesyl diphosphate biosynthesis",2,0.9999999999999999,-1.26446847175139,0.0
+20,PWY0-1221,putrescine degradation II,4,1.0,-1.70847306791318,0.0
+21,PWY0-1021,alanine biosynthesis III,2,NC,-1.828239088003675,0.0
+22,ALANINE-SYN2-PWY,alanine biosynthesis II,2,NC,-1.07389342484861,0.0
+23,PWY0-1433,tetrahydromonapterin biosynthesis,2,NC,-1.46652943519179,0.0
+24,PWY-5783,octaprenyl diphosphate biosynthesis,1,NC,-1.19693743388179,0.0
