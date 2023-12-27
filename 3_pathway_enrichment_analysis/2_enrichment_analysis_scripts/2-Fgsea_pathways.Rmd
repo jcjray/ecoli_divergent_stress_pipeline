@@ -1,0 +1,161 @@
+---
+title: "FgseaMultilevel Enrichment for Pathways"
+output: html_notebook
+---
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+# This script is build under the R version 
+```{r}
+R.version.string
+```
+
+
+# Loading necessary libraries
+```{r}
+library(fgsea)
+library(ggplot2)
+library(BiocParallel)
+register(SerialParam())
+```
+
+# Loading necessary files
+```{r}
+# load data
+defolder = "../1-DEAnalyz/DE-CSVs/pre_lac25"
+
+# catch file path
+csvfiles = list.files(defolder, pattern = "_vs_", recursive = TRUE, full.names = TRUE)
+csvfiles
+```
+
+# 1. Gene rank
+
+```{r}
+rankprep = function(defile, padj = 0.1){
+  "
+  Description: function for reading differential expression files and return the rank.
+  Input: (.csv fron DESEQ2) differential expression file path
+  Output: (a named list) rank list, each name is a gene, content is LFC.
+  "
+  dedata = read.csv(defile, header=TRUE, row.names = 1, sep=",")
+  dedata = dedata[dedata$padj<padj,]
+  ranks <- dedata$log2FoldChange
+  names(ranks) <- row.names(dedata)
+  #str(ranks)
+  return(ranks)
+}
+```
+
+```{r}
+generank_01 = rankprep("../1-DEAnalyz/DE-CSVs/pre_lac25/pre_lac01_vs_pre_lac25.csv")
+str(generank_01)
+```
+
+```{r}
+generank_50 = rankprep("../1-DEAnalyz/DE-CSVs/pre_lac25/pre_lac50_vs_pre_lac25.csv")
+str(generank_50)
+```
+
+# 2. Pathway List
+
+```{r}
+# create function that turn the GO.csv file into a named list
+pathprep = function(go_df){
+  "
+  Description: function for reading a GO dataframe and return a named list
+  Input: 
+    go_df - (a dataframe) 1st col: name, second col: subset genes
+  Output: (a named list), each item is a char list of genes, and the name are go terms.
+  "
+  godata = list(strsplit(as.character(go_df[[c(2)]]), ","))[[1]]
+  names(godata) <- go_df[[c(1)]]
+  length(godata)
+  return(godata)
+}
+```
+
+```{r}
+pathway_file = "HelpFiles/Ecyc_NCBI_pathways.csv"
+pathway = read.csv(pathway_file, header = TRUE, stringsAsFactors=FALSE)
+pathway[c(2,4)]
+```
+
+```{r}
+pathway_list = pathprep(pathway[c(2,4)])
+pathway_list[1:3]
+```
+# 3. Enrichment analysis
+
+```{r}
+#pathway_list[1:3]
+#generank_01[1:10]
+length(pathway_list)
+```
+
+```{r}
+# Running fgseaMultilevel:
+fgseaMultilevelRes_01 <- fgseaMultilevel(pathways = pathway_list, 
+                                      stats = generank_01,
+                                      minSize=3,
+                                      maxSize=Inf,
+                                      nproc=200)
+
+fgseaMultilevelRes_50 <- fgseaMultilevel(pathways = pathway_list, 
+                                      stats = generank_50,
+                                      minSize=3,
+                                      maxSize=Inf,
+                                      nproc=200
+                                      )
+```
+The warning produced indicates that there are few genes that have the same fold change and so are ranked equally. fgsea with arbitrarily order determine which comes first in the ranked list. As long as this number is small it shouldn’t significantly effect the results. If the number is large something is suspicious about the fold change results.
+
+```{r}
+# save enrichment results to files
+str_leadedge = c()
+res_01 = fgseaMultilevelRes_01
+res_01$leadingEdge = c()
+for (i in 1:length(fgseaMultilevelRes_01$leadingEdge)) {
+  str_edge = paste(fgseaMultilevelRes_01$leadingEdge[[i]], collapse = ',')
+  #print(str_edge)
+  res_01[i, "leadingEdge"]=str_edge
+}
+res_01
+```
+
+```{r}
+# save enrichment results to files
+str_leadedge = c()
+res_50 = fgseaMultilevelRes_50
+res_50$leadingEdge = c()
+for (i in 1:length(fgseaMultilevelRes_50$leadingEdge)) {
+  str_edge = paste(fgseaMultilevelRes_50$leadingEdge[[i]], collapse = ',')
+  #print(str_edge)
+  res_50[i, "leadingEdge"]=str_edge
+}
+res_50
+```
+
+```{r}
+write.csv(res_01,'(no amp)EnrichFiles/lac01_vs_lac25.csv')
+write.csv(res_50,'(no amp)EnrichFiles/lac50_vs_lac25.csv')
+```
+
+```{r}
+# The resulting table contains enrichment scores and p-values:
+fgseaMultilevelRes_01[pval<=0.05, ][order(NES, decreasing=TRUE)]
+```
+
+```{r}
+# The resulting table contains enrichment scores and p-values:
+fgseaMultilevelRes_50[pval<=0.05, ][order(NES, decreasing=TRUE)]
+```
+
+```{r}
+hist(fgseaMultilevelRes_01[pval<=0.05, ]$NES, breaks=25, , xlim=range(-6, 3))
+```
+
+```{r}
+hist(fgseaMultilevelRes_50[pval<=0.1, ]$NES, breaks=25, xlim=range(-7, 3))
+```
+

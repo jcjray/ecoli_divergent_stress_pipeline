@@ -1,0 +1,13 @@
+,Pathway ID,Name,Gene Set Size,Spearman correlation,Toxication NES,Starvation NES
+0,PWYCQD-3,N-acetyl-galactosamine degradation,9,0.5166666666666667,1.84151128352989,0.0
+1,PWYCQD-4,galactosamine degradation,8,0.6666666666666669,1.91799610451597,0.0
+2,GALACTITOLCAT-PWY,galactitol degradation,5,0.7,1.59677362675525,0.0
+3,PWY0-1321,nitrate reduction III (dissimilatory),12,0.8041958041958043,1.90376902721957,0.0
+4,3-HYDROXYPHENYLACETATE-DEGRADATION-PWY,4-hydroxyphenylacetate degradation,8,0.880952380952381,1.73575101464198,0.0
+5,PWY0-1356,formate to dimethyl sulfoxide electron transfer,9,0.8833333333333333,1.69948975628281,0.0
+6,PWY-6690,cinnamate and 3-hydroxycinnamate degradation to 2-oxopent-4-enoate,8,0.9285714285714287,1.72900524562342,0.0
+7,HCAMHPDEG-PWY,3-phenylpropanoate and 3-(3-hydroxyphenyl)propanoate degradation to 2-oxopent-4-enoate,8,0.9285714285714287,1.72900524562342,0.0
+8,PWY0-1277,3-phenylpropionate and 3-(3-hydroxyphenyl)propionate degradation,12,0.9702291586486096,1.92679151383884,0.0
+9,RHAMCAT-PWY,L-rhamnose degradation I,4,1.0,1.58032917633878,0.0
+10,PWY0-1465,D-malate degradation,1,NC,1.36929170591216,0.0
+11,PWY0-981,taurine degradation IV,1,NC,1.33115815410091,0.0

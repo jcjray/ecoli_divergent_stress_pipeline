@@ -1,0 +1,15 @@
+,Pathway ID,Name,Gene Set Size,Spearman correlation,Toxication NES,Starvation NES
+0,FAO-PWY,fatty acid &beta;-oxidation I,9,-0.06666666666666667,0.0,2.22387756673409
+1,PWY-4261,glycerol degradation I,5,0.49999999999999994,0.0,2.03254716888534
+2,PWY0-1182,trehalose degradation II (trehalase),3,0.5,0.0,1.62706334774405
+3,PWY-6952,glycerophosphodiester degradation,6,0.7142857142857143,0.0,1.79463742310468
+4,PWY0-381,glycerol and glycerophosphodiester degradation,7,0.7567874686642696,0.0,1.92648051528494
+5,GLYOXDEG-PWY,glycolate and glyoxylate degradation II,5,0.8999999999999998,0.0,1.93846672506495
+6,PWY0-1299,arginine dependent acid resistance,2,0.9999999999999999,0.0,1.194795005319771
+7,DARABCAT-PWY,D-arabinose degradation II,1,NC,0.0,1.26124041610319
+8,PWY-7346,UDP-&alpha;-D-glucuronate biosynthesis (from UDP-glucose),1,NC,0.0,2.06226559549312
+9,PWY0-1337,oleate &beta;-oxidation,1,NC,0.0,3.74727095092712
+10,MANNIDEG-PWY,mannitol degradation I,1,NC,0.0,3.20579409473822
+11,GLUAMCAT-PWY,<i>N</i>-acetylglucosamine degradation I,2,NC,0.0,1.2183074547524586
+12,PWY-7179,purine deoxyribonucleosides degradation,2,NC,0.0,1.39473892784982
+13,PWY-6028,acetoin degradation,2,NC,0.0,1.47252358174123
